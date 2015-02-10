@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Test</title>
+        <link rel="stylesheet" href="mocha.css" />
+    </head>
+    <body>
+
+
+        <div id="mocha"><p><a href=".">Index</a></p></div>
+        <div id="messages"></div>
+        <div id="fixtures"></div>
+        <script src="node_modules/mocha/mocha.js"></script> //Ścieżka do pliku biblioteki Mocha
+        <script src="node_modules/chai/chai.js"></script> //Ścieżka do pliku biblioteki Chai
+        <script src="lib/afterTest.js"></script>  //Ścieżka do pliku .js gdzie pisany jest kod aplikacji
+        <script>mocha.setup('bdd')</script>
+        <script src="test/test.js"></script>  //Ścieżka do pliku .js gdzie pisany jest test
+        <script>mocha.run();</script>
+
+
+        
+    </body>
+</html>
