@@ -40,12 +40,12 @@ describe("handleFile", function() {
 
 			});
 		}*/
-		var stopPropagationSpy = sinon.spy();
-		var evt = { stopPropagation: stopPropagationSpy };
+		// var stopPropagationSpy = sinon.spy();
+		// var evt = { stopPropagation: stopPropagationSpy };
 
-		select(evt);
+		// select(evt);
 
-		sinon.assert.calledOnce(stopPropagationSpy);
+
 	});
 	describe("#setConfig", function() {
 		var exampleId = "",
@@ -69,22 +69,27 @@ describe("handleFile", function() {
 
 describe("fileUp", function() {
 	describe("#input", function() {
-		it("", function() {
-			handleFile.select = sinon.spy();
-			
+		it("should handle event", function() {
+		handleFile.select = sinon.spy();
+		conf.file.dispatchEvent("change");
+
+		sinon.assert.calledOnce(stopPropagationSpy);
+
+		expect(handleFile.select.calledOnce).to.be.true;
+
 
 		});
 	});
 	describe("#setConfig", function() {
 		var exampleId = "",
-			configure = handleFile.setConfig({fileElement : exampleId});
+			configure = fileUp.setConfig({fileElement : exampleId});
 
 		it("should return default value", function() {
 			expect(configure.fileElement).to.equal('#files');
 		});
 		it("should return passed value", function() {
 			var exampleId = "#tararara";
-			expect(handleFile.setConfig({
+			expect(fileUp.setConfig({
         		fileElement : exampleId,        
     		}).fileElement).to.equal('#tararara');
 		});
@@ -98,20 +103,20 @@ describe("fileUp", function() {
 
 describe("dragAndDrop", function() {
 	describe("#drag", function() {
-		it("", function() {
+		it("should check dragover and drop events", function() {
 
 		});
 	});
 	describe("#setConfig", function() {
 		var exampleId = "",
-			configure = handleFile.setConfig({dragElement : exampleId});
+			configure = dragAndDrop.setConfig({dragElement : exampleId});
 
 		it("should return default value", function() {
 			expect(configure.dragElement).to.equal('#drag');
 		});
 		it("should return passed value", function() {
 			var exampleId = "#tararara";
-			expect(handleFile.setConfig({
+			expect(dragAndDrop.setConfig({
         		dragElement : exampleId,        
     		}).dragElement).to.equal('#tararara');
 		});
