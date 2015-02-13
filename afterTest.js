@@ -1,11 +1,12 @@
 //module.exports = {};
 //var modules = module.exports;
-
+"use strict";
 var thumbnails = (function() {
+
     function makeCanvas(img, width, height) {
-            var canvas = document.createElement('canvas'),
-                canvasUrl = document.createElement('a'),
-                ctx = canvas.getContext('2d');
+            var canvas = document.createElement("canvas"),
+                canvasUrl = document.createElement("a"),
+                ctx = canvas.getContext("2d");
 
             canvas.width = width;
             canvas.height = height;  
@@ -19,14 +20,14 @@ var thumbnails = (function() {
             return canvasUrl;
     }
     return {
-        makeCanvas: makeCanvas
+        makeCanvas: makeCanvas,
     };
 })();
 
 var handleFile = (function () {
 
     var conf = {};
-    var getConfig = function(partialConfig) {
+    var setConfig = function(partialConfig) {
         partialConfig.galleryElement = partialConfig.galleryElement || "#gallery";
   
         conf.gallery = document.querySelector(partialConfig.galleryElement);
@@ -36,50 +37,37 @@ var handleFile = (function () {
     function select(evt) {
         evt.stopPropagation();
         evt.preventDefault();
-        var filesHolder = (evt.type === 'drop') ? (filesHolder = evt.dataTransfer.files) : (filesHolder = evt.target.files);
+        var filesHolder = (evt.type === "drop") ? (evt.dataTransfer.files) : (evt.target.files);
 
-        for (var i = 0, file;
-            (file = filesHolder[i]); i++) {
+        function pictureAppend(reader) { 
+            return function () { 
+                var img = new Image();
+
+                img.src = reader.result; 
+                //thumbnails 
+                conf.gallery.appendChild(thumbnails.makeCanvas(img, 150, 150)); 
+            };
+        }
+        for (var i = 0, file; (file = filesHolder[i]); i++) {
             var reader = new FileReader();
-
             // Only process image files.
             if (file.type.match("image.*")) {
-                
-
-                
-                function pictureAppend(reader) { 
-                    return function () { 
-
-                        var img = new Image();
-
-                            img.src = reader.result; 
-                            //thumbnails 
-                            conf.gallery.appendChild(thumbnails.makeCanvas(img, 150, 150)); 
-                        };
-                        
-                }
-
                 reader.onload = pictureAppend(reader);
-
                 // Read in the image file as a data URL.
                 reader.readAsDataURL(file);
             }
         }
     }
-        return {
-            select: select,
-            getConfig:getConfig,
-        };
-
+    return {
+        select: select,
+        setConfig:setConfig,
+    };
 })();
-
-
-
 
 var fileUp = (function () {
 
     var conf = {};
-    var getConfig = function(partialConfig) {
+    var setConfig = function(partialConfig) {
         partialConfig.filesElement = partialConfig.fileElement || "#files";
   
         conf.file = document.querySelector(partialConfig.fileElement);
@@ -87,44 +75,41 @@ var fileUp = (function () {
     };
 
     function input() {
-        conf.file.addEventListener('change', handleFile.select, false);
+        if(conf.file !== null) {
+            conf.file.addEventListener("change", handleFile.select, false);
+        }
     }
     return {
             input:input,
-            getConfig:getConfig
+            setConfig:setConfig,
         };
 })();
 
 var dragAndDrop = (function() {
 
     var conf = {};
-    var getConfig = function(partialConfig) {
+    var setConfig = function(partialConfig) {
         partialConfig.dragElement = partialConfig.dragElement || "#drag";
   
         conf.drag = document.querySelector(partialConfig.dragElement);
         return partialConfig;
     };
 
-
-
-
-    
     function drag() {
         function handleDragOver(evt) {
             evt.stopPropagation();
             evt.preventDefault();
-            evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+       
         }
     // Setup the dnd listeners.
-
-        conf.drag.addEventListener('dragover', handleDragOver, false);
-        conf.drag.addEventListener('drop', handleFile.select, false);
+        if(conf.drag !== null) {
+            conf.drag.addEventListener("dragover", handleDragOver, false);
+            conf.drag.addEventListener("drop", handleFile.select, false);
+        }
     }
-
-    
     return {
         drag:drag,
-        getConfig:getConfig
+        setConfig:setConfig
     };
 })();
 
@@ -133,14 +118,14 @@ var dragAndDrop = (function() {
 
 var main = (function() {
     //configure 
-    fileUp.getConfig({
-        fileElement : '#files'
+    fileUp.setConfig({
+        fileElement : "#files"
     });
-    dragAndDrop.getConfig({
+    dragAndDrop.setConfig({
         dragElement: "#drag"
     });
-    handleFile.getConfig({
-        galleryElement : '#gallery',        
+    handleFile.setConfig({
+        galleryElement : "#gallery",        
     });
 
     dragAndDrop.drag();
