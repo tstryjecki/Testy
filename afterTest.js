@@ -30,7 +30,7 @@ var handleFile = (function () {
     var setConfig = function(partialConfig) {
         partialConfig.galleryElement = partialConfig.galleryElement || "#gallery";
   
-        conf.gallery = document.querySelector(partialConfig.galleryElement);
+        conf.gallery = document.getElementById(partialConfig.galleryElement);
         return partialConfig;
     };
 
@@ -68,9 +68,9 @@ var fileUp = (function () {
 
     var conf = {};
     var setConfig = function(partialConfig) {
-        partialConfig.filesElement = partialConfig.fileElement || "#files";
+        partialConfig.fileElement = partialConfig.fileElement || "#files";
   
-        conf.file = document.querySelector(partialConfig.fileElement);
+        conf.file = document.getElementById(partialConfig.fileElement);
         return partialConfig;
     };
 
@@ -91,7 +91,7 @@ var dragAndDrop = (function() {
     var setConfig = function(partialConfig) {
         partialConfig.dragElement = partialConfig.dragElement || "#drag";
   
-        conf.drag = document.querySelector(partialConfig.dragElement);
+        conf.drag = document.getElementById(partialConfig.dragElement);
         return partialConfig;
     };
 
@@ -99,7 +99,7 @@ var dragAndDrop = (function() {
         function handleDragOver(evt) {
             evt.stopPropagation();
             evt.preventDefault();
-       
+ 
         }
     // Setup the dnd listeners.
         if(conf.drag !== null) {
